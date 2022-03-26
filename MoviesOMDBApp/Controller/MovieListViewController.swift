@@ -17,7 +17,6 @@ class MovieListViewController: UIViewController {
     
     var movieListViewModel = MovieListViewModel(moviesServices: MoviesServices())
     var searchArray : [Search]?
-    var searchBarMovieArray = [Search]()
     var searching = false
     
     var page: Int = 1
@@ -103,7 +102,6 @@ class MovieListViewController: UIViewController {
          }
         }
     }
-    
 }
 
 extension MovieListViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -117,28 +115,7 @@ extension MovieListViewController : UICollectionViewDelegate, UICollectionViewDa
         else {
             preconditionFailure(K.CellErrorMessage)
         }
-
-        cell.titleLabel.text = self.searchArray?[indexPath.row].Title
-        cell.imageView.image = nil
-
-         if let urlString = self.searchArray?[indexPath.row].Poster, let url = URL(string: urlString), let data = try? Data(contentsOf: url), let image = UIImage(data: data), let imageFromCache = imageCache.object(forKey: image) as? UIImage {
-            cell.imageView.image = imageFromCache
-        }
-         else {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-
-                if let urlString = self.searchArray?[indexPath.row].Poster, let url = URL(string: urlString), let data = try? Data(contentsOf: url) {
-                        let imageToCache = UIImage(data: data)
-
-                    if let urlString = self.searchArray?[indexPath.row].Poster, let url = URL(string: urlString), let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                        self.imageCache.setObject(imageToCache!, forKey: image)
-                    }
-
-                    cell.imageView.image = UIImage(data: data)
-                    cell.setNeedsLayout()
-                }
-            }
-        }
+        cell.searchList = self.searchArray?[indexPath.row]
         return cell
     }
     
@@ -165,8 +142,7 @@ extension MovieListViewController : UICollectionViewDelegate, UICollectionViewDa
 extension MovieListViewController : UISearchBarDelegate {
    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        //self.searchBarMovieArray = searchArray.t.filter({$0.prefix(searchText.count) == searchText})
+
                  if searchText.count > 0 {
             movieName = searchText
             page = 1

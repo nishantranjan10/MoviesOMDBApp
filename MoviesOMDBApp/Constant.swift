@@ -24,3 +24,22 @@ extension NSObject {
         return String(describing: self)
     }
 }
+
+//Result enum to show success or failure
+enum Result<T> {
+    case success(T)
+    case failure(APPError)
+}
+
+//APPError enum which shows all possible errors
+      enum APPError: Error {
+          case networkError(Error)
+          case dataNotFound
+          case jsonParsingError(Error)
+          case invalidStatusCode(Int)
+      }
+
+public enum DownloadResult<T> {
+    case sucess(T)
+    case faliure(Error)
+}
