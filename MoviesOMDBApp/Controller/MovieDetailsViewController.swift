@@ -52,21 +52,13 @@ class MovieDetailsViewController: UIViewController {
     
     
     func initMovieImage() {
-           
-           if let urlString = self.movieDetails?.Poster, let url = URL(string:urlString) {
-               
-               DispatchQueue.global().async {
-                if  let data = try? Data(contentsOf: url) {
-                    DispatchQueue.main.async {
-                       self.imageView.image = UIImage(data: data)
-                    }
-                }
-            }
+        
+        self.imageView.loadThumbnail(urlString: self.movieDetails?.Poster ?? "")
+        
             DispatchQueue.main.async {
                 self.titleLabel.text = self.movieDetails?.Title
                 self.yearLabel.text = self.movieDetails?.Year
             }
-           }
        }
     
     func minutesToHoursMinutes (minutes : String) -> (hours : Int , leftMinutes : Int) {
@@ -80,7 +72,6 @@ class MovieDetailsViewController: UIViewController {
        return (0,0)
     }
 }
-
 
 extension MovieDetailsViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
